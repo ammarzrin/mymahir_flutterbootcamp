@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myflutter_nov2025/layout.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +12,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Training MyMahir',
+      title: 'MyMahir Flutter Bootcamp Nov 2025',
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.blueAccent),
+        // colorScheme: .fromSwatch(primarySwatch: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Training Nov 2025'),
+      home: const MyHomePage(title: 'Flutter Training'),
+      // home: const LayoutDemo(),
     );
   }
 }
@@ -36,13 +39,26 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController num2Controller = TextEditingController();
   int total = 0;
 
-  void calculate() {
+  void calculate(String operation) {
     setState(() {
       if (num1Controller.text.isNotEmpty && num1Controller.text.isNotEmpty) {
         int num1 = int.parse(num1Controller.text);
         int num2 = int.parse(num2Controller.text);
-        total = num1 + num2;
+
+        if (operation == '+') {
+          total = num1 + num2;
+        } else {
+          total = num1 - num2;
+        }
       }
+    });
+  }
+
+  void clear() {
+    setState(() {
+      num1Controller.clear();
+      num2Controller.clear();
+      total = 0;
     });
   }
 
@@ -52,9 +68,18 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         // backgroundColor: Colors.amber,
-        title: Center(
-          child: Text(widget.title, style: TextStyle(color: Colors.white)),
-        ),
+        title: Text(widget.title, style: TextStyle(color: Colors.white)),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LayoutDemo()),
+              );
+            },
+            child: Text("Layout Demo", style: TextStyle(color: Colors.white)),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -98,21 +123,38 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.symmetric(horizontal: 50, vertical: 8),
               child: Text("TOTAL: $total", style: TextStyle(fontSize: 20)),
             ),
-            IconButton(
-              onPressed: () {
-                calculate();
-              },
-              icon: Icon(
-                Icons.add,
-                color: Colors.red,
-                size: 40,
-                // shadows: [
-                //   Shadow(
-                //     blurRadius: 5.0,
-                //     color: Colors.grey,
-                //     offset: Offset(2.0, 2.0),
-                //   ),
-                // ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    calculate('+');
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 40,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    calculate('-');
+                  },
+                  icon: Icon(
+                    Icons.remove,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 40,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+              child: ElevatedButton(
+                onPressed: () {
+                  clear();
+                },
+                child: Text("CLEAR", style: TextStyle(fontSize: 18)),
               ),
             ),
           ],

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myflutter_nov2025/main.dart';
+import 'package:myflutter_nov2025/app/views/home.screen.dart';
 
 class LayoutDemo extends StatelessWidget {
   const LayoutDemo({super.key});
@@ -10,16 +10,19 @@ class LayoutDemo extends StatelessWidget {
         "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.\nLorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.";
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Layout Demo'),
-        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        backgroundColor: Colors.blue,
+        title: const Text(
+          'Flutter Layout Demo',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        // backgroundColor: Colors.blue,
         actions: [
           TextButton(
             onPressed: () {
               Navigator.push(
                 context, // the current page, the current context
                 MaterialPageRoute(
-                  builder: (context) => MyHomePage(title: "Home Page"),
+                  builder: (context) => HomeScreen(title: "Home Page"),
                 ),
               );
             },
@@ -47,6 +50,7 @@ class LayoutDemo extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: .center,
                     children: [
                       Expanded(
                         child: Column(
@@ -69,7 +73,10 @@ class LayoutDemo extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Icon(Icons.star, color: Colors.redAccent),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 4, 0),
+                        child: Icon(Icons.star, color: Colors.redAccent),
+                      ),
                       Text('41'),
                     ],
                   ),
@@ -106,7 +113,7 @@ class ButtonWithText extends StatelessWidget {
       mainAxisSize: .min,
       mainAxisAlignment: .center,
       children: [
-        Icon(icon, color: Colors.blue),
+        Icon(icon, color: Theme.of(context).colorScheme.primary),
         Text(
           label,
           style: TextStyle(fontSize: 12, fontWeight: .w400, color: Colors.blue),

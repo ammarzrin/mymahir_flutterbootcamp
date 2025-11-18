@@ -1,0 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:myflutter_nov2025/app/widgets/navbar.widget.dart';
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'MyMahir Flutter Bootcamp Nov 2025',
+      theme: ThemeData(
+        colorScheme: .fromSeed(seedColor: Colors.blueAccent),
+        // colorScheme: .fromSwatch(primarySwatch: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const NavBar(),
+    );
+  }
+}

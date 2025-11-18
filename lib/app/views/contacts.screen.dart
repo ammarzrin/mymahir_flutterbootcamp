@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:myflutter_nov2025/app/views/add_contact.screen.dart';
+import 'package:myflutter_nov2025/app/views/edit_contact.screen.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({super.key});
-
-  // This places all data pulling and functions related to this screen
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -34,7 +33,22 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   void addNewContact(Map<String, String> contactData) {
     setState(() {
+      // add the new contact to the list
       contacts.add(contactData);
+    });
+  }
+
+  void editContact(int index, Map<String, String> contactData) {
+    setState(() {
+      // update the contact at the specified index
+      contacts[index] = contactData;
+    });
+  }
+
+  void deleteContact(int index) {
+    setState(() {
+      // remove the contact at the specified index
+      contacts.removeAt(index);
     });
   }
 
@@ -54,7 +68,12 @@ class _ContactsScreenState extends State<ContactsScreen> {
         itemCount: contacts.length,
         itemBuilder: (context, index) {
           final contact = contacts[index];
-          return ContactItem(contact: contact);
+          return ContactItem(
+            contact: contact,
+            index: index,
+            onEdit: editContact,
+            onDelete: deleteContact,
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -78,9 +97,18 @@ class _ContactsScreenState extends State<ContactsScreen> {
 }
 
 class ContactItem extends StatelessWidget {
-  const ContactItem({super.key, required this.contact});
+  const ContactItem({
+    super.key,
+    required this.contact,
+    required this.index,
+    required this.onEdit,
+    required this.onDelete,
+  });
 
   final Map<String, String> contact;
+  final int index;
+  final Function(int, Map<String, String>) onEdit;
+  final Function(int) onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +126,22 @@ class ContactItem extends StatelessWidget {
           height: 50,
           fit: BoxFit.cover,
         ),
+      ),
+      trailing: IconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditContactScreen(
+                contact: contact,
+                contactIndex: index,
+                onEditContact: onEdit,
+                onDeleteContact: onDelete,
+              ),
+            ),
+          );
+        },
+        icon: Icon(Icons.edit, color: Theme.of(context).colorScheme.primary),
       ),
     );
   }

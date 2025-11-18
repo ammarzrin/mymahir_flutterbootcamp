@@ -116,7 +116,11 @@ class ButtonWithText extends StatelessWidget {
         Icon(icon, color: Theme.of(context).colorScheme.primary),
         Text(
           label,
-          style: TextStyle(fontSize: 12, fontWeight: .w400, color: Colors.blue),
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: .w400,
+            color: Theme.of(context).colorScheme.primary,
+          ),
         ),
       ],
     );

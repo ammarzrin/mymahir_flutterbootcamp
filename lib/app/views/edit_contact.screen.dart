@@ -1,29 +1,45 @@
 import 'package:flutter/material.dart';
 
-class AddContactScreen extends StatefulWidget {
-  const AddContactScreen({super.key, required this.onAddContact});
-  final Function(Map<String, String>) onAddContact;
+class EditContactScreen extends StatefulWidget {
+  const EditContactScreen({
+    super.key,
+    required this.contact,
+    required this.contactIndex,
+    required this.onEditContact,
+    required this.onDeleteContact,
+  });
+
+  final Map<String, String> contact;
+  final int contactIndex;
+  final Function(int, Map<String, String>) onEditContact;
+  final Function(int) onDeleteContact;
 
   @override
-  State<AddContactScreen> createState() => _AddContactScreenState();
+  State<EditContactScreen> createState() => _EditContactScreenState();
 }
 
-class _AddContactScreenState extends State<AddContactScreen> {
+class _EditContactScreenState extends State<EditContactScreen> {
   final formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
-  final imageURLController = TextEditingController(
-    text: // adding a default image URL
-        'https://a0.anyrgb.com/pngimg/1600/696/user-login-linux-kernel-answer-user-profile-chen-account-login-github-thumbnail-avatar.png',
-  );
+  late final TextEditingController nameController;
+  late final TextEditingController phoneController;
+  late final TextEditingController imageURLController;
 
   @override
-  // whenever leave the screen, clean up the controllers, clear the memory
   void dispose() {
     nameController.dispose();
     phoneController.dispose();
     imageURLController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.contact['name']);
+    phoneController = TextEditingController(text: widget.contact['phone']);
+    imageURLController = TextEditingController(
+      text: widget.contact['imageUrl'],
+    );
   }
 
   void submitForm() {
@@ -34,7 +50,11 @@ class _AddContactScreenState extends State<AddContactScreen> {
         'imageUrl': imageURLController.text,
       };
 
-      widget.onAddContact(contactData);
+      widget.onEditContact(widget.contactIndex, contactData);
+      viewSnackBar(
+        '${widget.contact['name']} updated successfully!',
+        Colors.greenAccent,
+      );
 
       nameController.clear();
       phoneController.clear();
@@ -44,12 +64,53 @@ class _AddContactScreenState extends State<AddContactScreen> {
     }
   }
 
+  void showDeleteConfirm() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Delete Contact'),
+        content: Text(
+          'Are you sure you want to delete ${widget.contact['name']}?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close the dialog
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              deleteContact();
+            },
+            child: Text('Delete', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void deleteContact() {
+    // Add callback for onDeleteContact
+    widget.onDeleteContact(widget.contactIndex);
+    // Show success message
+    viewSnackBar('${widget.contact['name']} deleted successfully!', Colors.red);
+    Navigator.pop(context); // Close the dialog
+    Navigator.pop(context); // Go back to previous screen
+  }
+
+  void viewSnackBar(String message, Color color) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message), backgroundColor: color));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add New Contact',
+          'Edit Contact',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -136,7 +197,24 @@ class _AddContactScreenState extends State<AddContactScreen> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [Icon(Icons.edit), Text('Save Contact')],
+                  children: [Icon(Icons.edit), Text('Save Changes')],
+                ),
+              ),
+              const SizedBox(height: 32),
+              TextButton(
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 32,
+                  ),
+                  foregroundColor: Colors.red,
+                ),
+                onPressed: () {
+                  showDeleteConfirm();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [Icon(Icons.delete), Text('Delete Contact')],
                 ),
               ),
             ],

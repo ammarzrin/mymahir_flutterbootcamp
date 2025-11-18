@@ -16,19 +16,20 @@ class _NavBarState extends State<NavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: <Widget>[
-        const LayoutDemo(),
-        const ContactsScreen(),
-      ][currentPageIndex],
+      // body: [const LayoutDemo(), const ContactsScreen()][currentPageIndex],
+      body: IndexedStack(
+        index: currentPageIndex,
+        children: const [LayoutDemo(), ContactsScreen()],
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.blue,
+        indicatorColor: Theme.of(context).colorScheme.primary,
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: const [
           NavigationDestination(
             selectedIcon: Icon(Icons.home, color: Colors.white),
             icon: Icon(Icons.home_outlined),

@@ -10,8 +10,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MyMahir Flutter Bootcamp Nov 2025',
       theme: ThemeData(
-        colorScheme: .fromSeed(seedColor: Colors.blueAccent),
-        // colorScheme: .fromSwatch(primarySwatch: Colors.blue),
+        // colorScheme: .fromSeed(seedColor: Colors.red),
+        colorScheme: .fromSwatch(primarySwatch: Colors.blue),
         useMaterial3: true,
       ),
       home: const NavBar(),

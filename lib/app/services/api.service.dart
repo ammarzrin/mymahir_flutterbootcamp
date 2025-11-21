@@ -5,7 +5,10 @@ import 'package:myflutter_nov2025/app/services/sharedprefs.dart';
 final ApiServices api = ApiServices();
 
 class ApiServices {
-  var baseurl = 'http://10.0.2.2:3000/api';
+  // var baseurl = 'http://10.0.2.2:3000/api';
+  var baseurl = 'https://myexpressnov2025-production.up.railway.app/api';
+  // Email: khairi@mail.com
+  // Password: P@ssw0rd
 
   Future<Response?> postDio(String path, FormData? formdata) async {
     String? token = await SharedPrefs.getLocalStorage('token') ?? '';

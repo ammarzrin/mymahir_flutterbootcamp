@@ -2,10 +2,13 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import 'package:myflutter_nov2025/app/services/api.service.dart';
+import 'package:myflutter_nov2025/app/services/sharedprefs.dart';
+import 'package:myflutter_nov2025/app/views/add_report.screen.dart';
+import 'package:myflutter_nov2025/app/views/login.screen.dart';
 import '../models/reports.model.dart';
 
 class ReportsController extends GetxController {
-  var reportsList = <Report>[
+  var reportList = <Report>[
     // Report(
     //   id: 1,
     //   title: "Toilet Explosion",
@@ -35,37 +38,40 @@ class ReportsController extends GetxController {
     getReports();
   }
 
-  getReports() async {
+  Future<void> navigateToAddReport() async {
+    await Get.to(() => AddReportScreen());
+    getReports();
+  }
+
+  Future<void> onLogout() async {
+    await SharedPrefs.removeLocalStorage('token');
+    await SharedPrefs.removeLocalStorage('user');
+    await Get.to(() => LoginScreen());
+  }
+
+  Future<void> getReports() async {
     log('Starting getReports()');
     try {
-      var result = await api.getDio('/products');
+      var result = await api.getDio('/reports');
       log('API call successful, result: $result');
       if (result != null && result.statusCode == 200) {
         log('Status code is 200, processing data...');
-        reportsList.assignAll(
-          (result.data['products'] as List).map((report) {
+        reportList.assignAll(
+          (result.data['data'] as List).map((report) {
             return Report(
               id: report['id'],
               title: report['title'],
-              date: report['price'].toString(),
+              date: report['date'].toString(),
               category: report['category'],
-              imagePath: report['thumbnail'] != null
-                  ? report['thumbnail'].toString()
+              imagePath: report['imagePath'] != null
+                  ? '${api.baseurl}/${report['imagePath']}'
                   : '',
-              // imagePath: (() {
-              //   final img = report['thumbnail']?.toString();
-              //   if (img == null || img.isEmpty) return '';
-              //   if (img.startsWith('http://') || img.startsWith('https://')) {
-              //     return img;
-              //   }
-              //   return Uri.parse(api.baseurl).resolve(img).toString();
-              // })(),
             );
           }).toList(),
         );
-        log('Report list updated with ${reportsList.length} items');
+        log('Report list updated with ${reportList.length} items');
         log(
-          'Reports loaded: ${reportsList.length}, first image: ${reportsList.isNotEmpty ? reportsList.first.imagePath : 'none'}',
+          'Reports loaded: ${reportList.length}, first image: ${reportList.isNotEmpty ? reportList.first.imagePath : 'none'}',
         );
       } else {
         log('Unexpected status code: ${result?.statusCode}');

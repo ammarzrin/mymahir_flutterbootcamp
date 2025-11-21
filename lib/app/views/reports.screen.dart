@@ -18,12 +18,19 @@ class ReportScreen extends StatelessWidget {
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        actions: [
+          TextButton(onPressed: controller.onLogout, child: Text('Logout')),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: controller.navigateToAddReport,
+        child: Icon(Icons.add),
       ),
       body: Obx(
         () => ListView.builder(
-          itemCount: controller.reportsList.length,
+          itemCount: controller.reportList.length,
           itemBuilder: (context, index) {
-            final report = controller.reportsList[index];
+            final report = controller.reportList[index];
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               shape: RoundedRectangleBorder(borderRadius: .circular(12)),

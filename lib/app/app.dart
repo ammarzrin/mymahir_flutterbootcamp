@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myflutter_nov2025/app/widgets/navbar.widget.dart';
+import 'package:myflutter_nov2025/app/views/login.screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         colorScheme: .fromSwatch(primarySwatch: Colors.blue),
         useMaterial3: true,
       ),
-      home: const NavBar(),
+      home: LoginScreen(),
     );
   }
 }
